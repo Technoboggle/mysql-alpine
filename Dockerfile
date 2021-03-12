@@ -1,4 +1,4 @@
-FROM alpine:3.12.3
+FROM alpine:3.13.2
 MAINTAINER Edward Finlayson <edward.finlayson@btinternet.com>
 
 LABEL APP="mariadb"
@@ -21,8 +21,8 @@ WORKDIR /app
 VOLUME /app
 COPY startup.sh /startup.sh
 
-RUN apk --update add mysql mysql-client && rm -f /var/cache/apk/*
-RUN addgroup mysql mysql
+RUN apk --update add mysql mysql-client && rm -f /var/cache/apk/* && \
+    addgroup mysql mysql
 
 # Work path
 WORKDIR /scripts
