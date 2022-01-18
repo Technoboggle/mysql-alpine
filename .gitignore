@@ -48,3 +48,8 @@ Thumbs.db
 *.swo
 *#
 *.iml
+
+
+# Application level ignores, not require in buld repository #
+#############################################################
+mysql/*

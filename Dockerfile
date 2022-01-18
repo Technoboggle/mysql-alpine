@@ -1,4 +1,4 @@
-FROM alpine:3.13.5
+FROM alpine:3.15.0
 MAINTAINER Edward Finlayson <edward.finlayson@btinternet.com>
 
 LABEL APP="mariadb"
@@ -12,9 +12,6 @@ ENV MYSQL_USER app
 ENV MYSQL_PASSWORD app
 ENV MYSQL_USER_MONITORING monitoring
 ENV MYSQL_PASSWORD_MONITORING monitoring
-
-
-
 
 
 WORKDIR /app
@@ -37,5 +34,5 @@ VOLUME [ "/var/lib/mysql" ]
 
 COPY my.cnf /etc/mysql/my.cnf
 
-EXPOSE 3306
+EXPOSE 3316
 CMD ["/startup.sh"]
