@@ -1,4 +1,4 @@
-FROM alpine:3.15.0
+FROM alpine:3.15.3
 MAINTAINER Edward Finlayson <edward.finlayson@btinternet.com>
 
 LABEL APP="mariadb"
@@ -13,26 +13,24 @@ ENV MYSQL_PASSWORD app
 ENV MYSQL_USER_MONITORING monitoring
 ENV MYSQL_PASSWORD_MONITORING monitoring
 
-
-WORKDIR /app
-VOLUME /app
-COPY startup.sh /startup.sh
-
-RUN apk --update add mysql mysql-client && rm -f /var/cache/apk/* && \
+# Installing packages MariaDB
+RUN apk --no-cache --update add mysql mysql-client; \
+    rm -f /var/cache/apk/*; \
     addgroup mysql mysql
 
 # Work path
 WORKDIR /scripts
 
 # Copy of the MySQL startup script
-#COPY scripts/start.sh start.sh
+COPY scripts/startup.sh startup.sh
+
 
 # Creating the persistent volume
 VOLUME [ "/var/lib/mysql" ]
 
-#ENTRYPOINT [ "./start.sh" ]
-
 COPY my.cnf /etc/mysql/my.cnf
 
-EXPOSE 3316
-CMD ["/startup.sh"]
+#ENTRYPOINT [ "./start.sh" ]
+
+EXPOSE 3306
+CMD ["./startup.sh"]

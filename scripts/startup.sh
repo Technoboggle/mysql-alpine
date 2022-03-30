@@ -1,5 +1,7 @@
 #!/bin/sh
 
+chmod 0755 /etc/mysql/my.cnf
+
 if [ -d /app/mysql ]; then
   echo "[i] MySQL directory already present, skipping creation"
 else
@@ -48,5 +50,8 @@ EOF
   rm -f $tfile
 fi
 
+echo "[i] Sleeping 5 sec"
+sleep 5
 
+echo "Starting all process"
 exec /usr/bin/mysqld --user=root --console
