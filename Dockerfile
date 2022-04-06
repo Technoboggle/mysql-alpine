@@ -1,4 +1,4 @@
-FROM alpine:3.15.3
+FROM alpine:latest
 MAINTAINER Edward Finlayson <edward.finlayson@btinternet.com>
 
 LABEL APP="mariadb"
