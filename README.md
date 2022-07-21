@@ -9,7 +9,8 @@ xattr -c .dockerignore
 xattr -c *
 chmod 0666 *
 chmod 0777 *.sh
-chmod 0777 scripts
+chmod 0755 mysql
+chmod 0755 scripts
 chmod 0777 scripts/start.sh
 
 
