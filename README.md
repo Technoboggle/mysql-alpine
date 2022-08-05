@@ -14,20 +14,21 @@ chmod 0755 scripts
 chmod 0777 scripts/start.sh
 
 
-docker build -f Dockerfile --progress=plain -t technoboggle/mysql-alpine:10.6.4-r2-3.15.5 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') --build-arg VCS_REF="`git rev-parse --verify HEAD`" --build-arg BUILD_VERSION=0.05 --no-cache --progress=plain .
+docker build -f Dockerfile --progress=plain -t technoboggle/mysql-alpine:8.0.30-3.16.1 --build-arg BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ') --build-arg VCS_REF="`git rev-parse --verify HEAD`" --build-arg BUILD_VERSION=0.05 --no-cache --progress=plain .
 
 in the above pay special attenttion to the values to be updated which are:
-  10.6.4-r2-3.15.5                 = MySQL version - alpine version
+  8.0.30-3.16.1                 = MySQL version - alpine version
   "`git rev-parse --verify HEAD`"  = git commit SHA key
   0.05                             = current version of this image
 
 
 
-docker run -it -d -v $(pwd):/app -p 3306:3306 --rm --name mymysql --env-file .env technoboggle/mysql-alpine:10.6.4-r2-3.15.5 --socket=/tmp/mysql.sock --bind_address=0.0.0.0
-#docker run -it --rm -v $(pwd):/app -p 3306:3306 technoboggle/mysql-alpine:10.6.4-r2-3.15.5
-docker tag technoboggle/mysql-alpine:10.6.4-r2-3.15.5 technoboggle/mysql-alpine:latest
+docker run -it -d -v $(pwd):/app -p 3306:3306 --rm --name mymysql --env-file .env technoboggle/mysql-alpine:8.0.30-3.16.1
+#docker run -it --rm -v $(pwd):/app -p 3306:3306 technoboggle/mysql-alpine:8.0.30-3.16.1
+docker tag technoboggle/mysql-alpine:8.0.30-3.16.1 technoboggle/mysql-alpine:8.0.30-3.16.1
+docker tag technoboggle/mysql-alpine:8.0.30-3.16.1 technoboggle/mysql-alpine:latest
 docker login
-docker push technoboggle/mysql-alpine:10.6.4-r2-3.15.5
+docker push technoboggle/mysql-alpine:8.0.30-3.16.1
 docker push technoboggle/mysql-alpine:latest
 docker container stop -t 10 mymysql
 

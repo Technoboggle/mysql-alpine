@@ -1,7 +1,7 @@
-FROM alpine:3.15.5
+FROM alpine:3.16.1
 MAINTAINER Edward Finlayson <edward.finlayson@btinternet.com>
 
-LABEL APP="mariadb"
+LABEL APP="MySQL"
 LABEL APP_REPOSITORY="https://pkgs.alpinelinux.org/package/edge/main/aarch64/mysql"
 
 #ENV TIMEZONE Europe/Paris
@@ -18,7 +18,8 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG BUILD_VERSION
 
-ENV ALPINE_VERSION 3.15.5
+ENV MYSQL_VERSION 10.6.8-r0
+ENV ALPINE_VERSION 3.16.1
 
 # Labels.
 LABEL maintainer="edward.finlayson@btinternet.com"
@@ -37,12 +38,11 @@ LABEL org.label-schema.vcs-url="https://github.com/Technoboggle/php-fpm"
 LABEL org.label-schema.vcs-ref="$VCS_REF"
 LABEL org.label-schema.vendor="WSO2"
 LABEL org.label-schema.version="$BUILD_VERSION"
-LABEL org.label-schema.docker.cmd="docker run -it -d -p 16379:6379 --rm --name myredis technoboggle/redis-alpine:${REDIS_VERSION}-${ALPINE_VERSION}"
-
+LABEL org.label-schema.docker.cmd="docker run -it -d -p 16379:6379 --rm --name mymysql technoboggle/mysql-alpine:${MYSQL_VERSION}-${ALPINE_VERSION}"
 
 
 # Installing packages MariaDB
-RUN apk --no-cache --update add mysql mysql-client; \
+RUN apk add --no-cache --update mysql=$MYSQL_VERSION mysql-client=$MYSQL_VERSION; \
     rm -f /var/cache/apk/*; \
     addgroup mysql mysql
 
