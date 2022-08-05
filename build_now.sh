@@ -21,10 +21,10 @@ docker build -f Dockerfile -t technoboggle/mysql-alpine:"$mysql_ver-$alpine_ver"
 #--progress=plain 
 
 docker run -it -d --rm -p 3306:3306 --name mymysql technoboggle/mysql-alpine:"$mysql_ver-$alpine_ver"
-docker tag technoboggle/mysql-alpine:"$mysql_ver-$alpine_ver" technoboggle/mysql-alpine:latest
+#docker tag technoboggle/mysql-alpine:"$mysql_ver-$alpine_ver" technoboggle/mysql-alpine:latest
 docker login
 docker push technoboggle/mysql-alpine:"$mysql_ver-$alpine_ver"
-docker push technoboggle/mysql-alpine:latest
-#docker container stop -t 10 mymysql
+#docker push technoboggle/mysql-alpine:latest
+docker container stop -t 10 mymysql
 
 cd "$owd"

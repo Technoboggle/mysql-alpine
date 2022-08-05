@@ -49,3 +49,6 @@ Jan 19 10:11:10 kernel: 00:E0:4C:6E:00:E9 not mesh client, can't delete it
 Jan 19 10:11:10 kernel: D8:F1:5B:DB:55:2A not mesh client, can't delete it
 Jan 19 10:11:17 syslog: wlceventd_proc_event(491): eth1: Deauth_ind DC:85:DE:3E:27:BF, status: 0, reason: Disassociated due to inactivity (4), rssi:0
 Jan 19 10:11:26 pppd[928]: Timeout waiting for PADO packets
+
+
+deprecated the use of the :latest tag as it seeds confusion
