@@ -1,8 +1,4 @@
-FROM alpine:3.17.1
-MAINTAINER Edward Finlayson <edward.finlayson@btinternet.com>
-
-LABEL APP="MySQL"
-LABEL APP_REPOSITORY="https://pkgs.alpinelinux.org/package/edge/main/aarch64/mysql"
+FROM alpine:3.18.2
 
 #ENV TIMEZONE Europe/Paris
 ENV TIMEZONE Europe/GMT
@@ -22,14 +18,11 @@ ARG BUILD_VERSION
 
 ARG DB_VER=10.6.11-r0
 #ENV MYSQL_VERSION 8.0.30
-ARG ALPINE_VER=3.17.1
-
-
-#ENV MYSQL_VERSION "$DB_VER"
-#ENV MYSQL_VERSION 8.0.30
-#ENV ALPINE_VERSION "$ALPINE_VER"
+ARG ALPINE_VER=3.18.2
 
 # Labels.
+LABEL APP="MySQL"
+LABEL APP_REPOSITORY="https://pkgs.alpinelinux.org/package/edge/main/aarch64/mysql"
 LABEL maintainer="Edward Finlayson <edward.finlayson@btinternet.com>" \
     architecture="amd64/x86_64" \
     mariadb-version="${DB_VER}" \
