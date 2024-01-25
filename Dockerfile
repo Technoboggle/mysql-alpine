@@ -1,4 +1,4 @@
-FROM alpine:3.18.2
+FROM alpine:3
 
 #ENV TIMEZONE Europe/Paris
 ENV TIMEZONE Europe/GMT
