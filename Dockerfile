@@ -1,4 +1,38 @@
-FROM alpine:3.18.2
+ARG ALPINE_VERSION
+ARG MYSQL_VERSION
+ARG MAINTAINER_NAME
+ARG AUTHORNAME
+ARG AUTHORS
+ARG VERSION
+ARG SCHEMAVERSION
+ARG NAME
+ARG DESCRIPTION
+ARG URL
+ARG VCS_URL
+ARG VENDOR
+ARG BUILD_VERSION
+ARG BUILD_DATE
+ARG VCS_REF
+ARG DOCKERCMD
+
+FROM alpine:${ALPINE_VERSION}
+
+ARG ALPINE_VERSION
+ARG MYSQL_VERSION
+ARG MAINTAINER_NAME
+ARG AUTHORNAME
+ARG AUTHORS
+ARG VERSION
+ARG SCHEMAVERSION
+ARG NAME
+ARG DESCRIPTION
+ARG URL
+ARG VCS_URL
+ARG VENDOR
+ARG BUILD_VERSION
+ARG BUILD_DATE
+ARG VCS_REF
+ARG DOCKERCMD
 
 #ENV TIMEZONE Europe/Paris
 ENV TIMEZONE Europe/GMT
@@ -11,54 +45,51 @@ ENV MYSQL_COLLATION utf8_general_ci
 ENV MYSQL_USER_MONITORING monitoring
 ENV MYSQL_PASSWORD_MONITORING monitoring
 
-# Technoboggle Build time arguments.
-ARG BUILD_DATE
-ARG VCS_REF
-ARG BUILD_VERSION
-
-ARG DB_VER=10.6.11-r0
-#ENV MYSQL_VERSION 8.0.30
-ARG ALPINE_VER=3.18.2
-
 # Labels.
-LABEL APP="MySQL"
-LABEL APP_REPOSITORY="https://pkgs.alpinelinux.org/package/edge/main/aarch64/mysql"
-LABEL maintainer="Edward Finlayson <edward.finlayson@btinternet.com>" \
-    architecture="amd64/x86_64" \
-    mariadb-version="${DB_VER}" \
-    alpine-version="${ALPINE_VER}" \
-    build="${BUILD_DATE}" \
-    net.technoboggle.authorname="Edward Finlayson" \
-    net.technoboggle.authors="edward.finlayson@btinternet.com" \
-    net.technoboggle.version="0.1" \
-    net.technoboggle.description="This image builds a PHP-FPM server on Alpine" \
-    net.technoboggle.buildDate="${BUILD_DATE}" \
-    org.opencontainers.image.title="alpine-mariadb" \
-    org.opencontainers.image.description="MariaDB Docker image running on Alpine Linux" \
-    org.opencontainers.image.authors="Edward Finlayson <edward.finlayson@btinternet.com>" \
-    org.opencontainers.image.vendor="Teechnoboggle" \
-    org.opencontainers.image.version="v10.6.11-r0" \
-    org.opencontainers.image.url="https://hub.docker.com/r/technoboggle/mysql-alpine" \
-    org.opencontainers.image.source="https://github.com/Technoboggle/mysql-alpine" \
-    org.opencontainers.image.revision=$VCS_REF \
-    org.opencontainers.image.created=$BUILD_DATE
-
-# Installing packages MariaDB
-RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql; \
-    mkdir -a /app/mysql; \
-    apk add --no-cache --update mysql=$DB_VER mysql-client=$DB_VER; \
-    rm -f /var/cache/apk/*
+LABEL maintainer=${MAINTAINER_NAME} \
+    version=${VERSION} \
+    description=${DESCRIPTION} \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.name=${NAME} \
+    org.label-schema.description=${DESCRIPTION} \
+    org.label-schema.usage=${USAGE} \
+    org.label-schema.url=${URL} \
+    org.label-schema.vcs-url=${VCS_URL} \
+    org.label-schema.vcs-ref=${VSC_REF} \
+    org.label-schema.vendor=${VENDOR} \
+    org.label-schema.version=${BUILDVERSION} \
+    org.label-schema.schema-version=${SCHEMAVERSION} \
+    org.label-schema.docker.cmd=${DOCKERCMD} \
+    org.label-schema.docker.cmd.devel="" \
+    org.label-schema.docker.cmd.test="" \
+    org.label-schema.docker.cmd.debug="" \
+    org.label-schema.docker.cmd.help="" \
+    org.label-schema.docker.params=""
 
 # Copy of the MySQL startup script
 ADD files/run.sh /scripts/run.sh
 
-RUN mkdir /docker-entrypoint-initdb.d && \
+# Installing packages MariaDB
+RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql; \
+    apk add --no-cache --upgrade \
+		ca-certificates \
+	    ; \
+    \
+    apk add --no-cache --upgrade \
+    curl>=8.6.0-r0 \
+    libxml2>="2.12.6-r0" \
+    --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ \
+    --allow-untrusted ; \
+    \
+    mkdir -a /app/mysql; \
+    apk add --no-cache --update mysql=$MYSQL_VERSION mysql-client=$MYSQL_VERSION; \
+    rm -f /var/cache/apk/* && \
+    \
+    mkdir /docker-entrypoint-initdb.d && \
     mkdir /scripts/pre-exec.d && \
     mkdir /scripts/pre-init.d && \
     chmod -R 755 /scripts
 
 EXPOSE 3306
-
-VOLUME ["/var/lib/mysql"]
 
 ENTRYPOINT ["/scripts/run.sh"]
