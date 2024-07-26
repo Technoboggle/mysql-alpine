@@ -23,11 +23,12 @@ target "app" {
         VCS_URL = "${VCS_URL}"
         VENDOR = "${VENDOR}"
         BUILDVERSION = "${BUILD_VERSION}"
+        BUILD_LOCALLY = "${BUILD_LOCALLY}"
         BUILD_DATE="${BUILD_DATE}"
         DOCKERCMD:"${DOCKERCMD}"
         USAGE:"${USAGE}"
     }
-    platforms = ["linux/arm/v6", "linux/arm/v7", "linux/arm64/v8", "linux/arm64", "linux/armhf", "linux/amd64", "linux/386", "linux/s390x", "linux/ppc64le"]
+    platforms = ["linux/arm/v6", "linux/arm/v7", "linux/arm64/v8", "linux/amd64", "linux/386", "linux/s390x", "linux/ppc64le"]
     push = true
     cache = false
     progress = "plain"
