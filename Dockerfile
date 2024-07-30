@@ -52,9 +52,10 @@ RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql && \
     apk add --no-cache --upgrade --allow-untrusted --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/  mysql=${MYSQL_VERSION} mysql-client=${MYSQL_VERSION} mariadb-server-utils=${MYSQL_VERSION} ca-certificates; \
 	mkdir /scripts; \
     \
-    apk add --no-cache --upgrade \
+    apk add --no-cache --update \
     curl=${CURL_VERSION} \
     libxml2=${LIBXML2_VERSION} \
+    openssh-keygen \
     --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ --allow-untrusted; \
     \
     rm -rf /var/cache/apk/* && \
