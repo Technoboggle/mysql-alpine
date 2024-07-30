@@ -1,52 +1,45 @@
-ARG ALPINE_VERSION
-ARG MYSQL_VERSION
-ARG MAINTAINER_NAME
-ARG AUTHORNAME
-ARG AUTHORS
-ARG VERSION
-ARG SCHEMAVERSION
-ARG NAME
-ARG DESCRIPTION
-ARG URL
-ARG VCS_URL
-ARG VENDOR
-ARG BUILD_VERSION
-ARG BUILD_DATE
-ARG VCS_REF
-ARG DOCKERCMD
+ARG ALPINE_VERSION="${ALPINE_VERSION}"
 
 FROM alpine:${ALPINE_VERSION}
 
-ARG ALPINE_VERSION
-ARG MYSQL_VERSION
-ARG MAINTAINER_NAME
-ARG AUTHORNAME
-ARG AUTHORS
-ARG VERSION
-ARG SCHEMAVERSION
-ARG NAME
-ARG DESCRIPTION
-ARG URL
-ARG VCS_URL
-ARG VENDOR
-ARG BUILD_VERSION
-ARG BUILD_DATE
-ARG VCS_REF
-ARG DOCKERCMD
+ARG ALPINE_VERSION="${ALPINE_VERSION}"
+ARG MYSQL_VERSION="${MYSQL_VERSION}"
+ARG CURL_VERSION="${CURL_VERSION}"
+ARG LIBXML2_VERSION="${LIBXML2_VERSION}"
+ARG MAINTAINER_NAME="${MAINTAINER_NAME}"
+ARG AUTHORNAME="${AUTHORNAME}"
+ARG AUTHORS="${AUTHORS}"
+ARG VERSION="${VERSION}"
+ARG SCHEMAVERSION="${SCHEMAVERSION}"
+ARG NAME="${NAME}"
+ARG DESCRIPTION="${DESCRIPTION}"
+ARG URL="${URL}"
+ARG VCS_URL="${VCS_URL}"
+ARG VCS_REF="${VCS_REF}"
+ARG VENDOR="${VENDOR}"
+ARG BUILD_VERSION="${BUILD_VERSION}"
+ARG BUILD_LOCALLY="${BUILD_LOCALLY}"
+ARG BUILD_DATE="${BUILD_DATE}"
+ARG DOCKERCMD="${DOCKERCMD}"
+ARG USAGE="${USAGE}"
+ARG TIMEZONE="Europe/GMT"
+
 
 #ENV TIMEZONE Europe/Paris
-ENV TIMEZONE Europe/GMT
-ENV MYSQL_DATABASE app
-ENV MYSQL_USER app
-ENV MYSQL_PASSWORD app
-ENV MYSQL_ROOT_PASSWORD root
-ENV MYSQL_CHARSET utf8
-ENV MYSQL_COLLATION utf8_general_ci
-ENV MYSQL_USER_MONITORING monitoring
-ENV MYSQL_PASSWORD_MONITORING monitoring
+ENV TIMEZONE=Europe/GMT
+ENV MYSQL_DATABASE=app
+ENV MYSQL_USER=app
+ENV MYSQL_PASSWORD=app
+ENV MYSQL_ROOT_PASSWORD=root
+ENV MYSQL_CHARSET=utf8
+ENV MYSQL_COLLATION=utf8_general_ci
+ENV MYSQL_USER_MONITORING=monitoring
+ENV MYSQL_PASSWORD_MONITORING=monitoring
 
 # Labels.
-LABEL maintainer=${MAINTAINER_NAME} \
+LABEL \
+    maintainer=${VCS_URL} \
+    maintaintername=${MAINTAINER_NAME} \
     version=${VERSION} \
     description=${DESCRIPTION} \
     org.label-schema.build-date=${BUILD_DATE} \
@@ -55,9 +48,9 @@ LABEL maintainer=${MAINTAINER_NAME} \
     org.label-schema.usage=${USAGE} \
     org.label-schema.url=${URL} \
     org.label-schema.vcs-url=${VCS_URL} \
-    org.label-schema.vcs-ref=${VSC_REF} \
+    org.label-schema.vcs-ref=${VCS_REF} \
     org.label-schema.vendor=${VENDOR} \
-    org.label-schema.version=${BUILDVERSION} \
+    org.label-schema.version=${BUILD_VERSION} \
     org.label-schema.schema-version=${SCHEMAVERSION} \
     org.label-schema.docker.cmd=${DOCKERCMD} \
     org.label-schema.docker.cmd.devel="" \
@@ -66,29 +59,23 @@ LABEL maintainer=${MAINTAINER_NAME} \
     org.label-schema.docker.cmd.help="" \
     org.label-schema.docker.params=""
 
-# Copy of the MySQL startup script
-ADD files/run.sh /scripts/run.sh
-
 # Installing packages MariaDB
-RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql; \
-    apk add --no-cache --upgrade \
-		ca-certificates \
-	    ; \
+RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql && \
+    apk add --no-cache --upgrade --allow-untrusted --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/  mysql=${MYSQL_VERSION} mysql-client=${MYSQL_VERSION} mariadb-server-utils=${MYSQL_VERSION} ca-certificates; \
+	mkdir /scripts; \
     \
     apk add --no-cache --upgrade \
-    curl>=8.6.0-r0 \
-    libxml2>="2.12.6-r0" \
-    --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ \
-    --allow-untrusted ; \
+    curl=${CURL_VERSION} \
+    libxml2=${LIBXML2_VERSION} \
+    --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ --allow-untrusted; \
     \
-    mkdir -a /app/mysql; \
-    apk add --no-cache --update mysql=$MYSQL_VERSION mysql-client=$MYSQL_VERSION; \
-    rm -f /var/cache/apk/* && \
+    rm -rf /var/cache/apk/* && \
     \
-    mkdir /docker-entrypoint-initdb.d && \
-    mkdir /scripts/pre-exec.d && \
-    mkdir /scripts/pre-init.d && \
-    chmod -R 755 /scripts
+    mkdir /docker-entrypoint-initdb.d
+
+# Copy of the MySQL startup script
+COPY ./files/run.sh /scripts/run.sh
+COPY ./files/usage.txt /usr/doc/usage.txt
 
 EXPOSE 3306
 

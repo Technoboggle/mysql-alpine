@@ -1,0 +1,1 @@
+USAGE="docker run -d -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=app -e MYSQL_USER=app -e MYSQL_PASSWORD=app -e MYSQL_CHARSET=utf8 -e MYSQL_COLLATION=utf8_general_ci -e MYSQL_USER_MONITORING=monitoring -e MYSQL_PASSWORD_MONITORING=monitoring mysql-alpine"

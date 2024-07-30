@@ -1,5 +1,7 @@
 ALPINE_VERSION="3.20.1"
 MYSQL_VERSION="11.4.2-r1"
+CURL_VERSION="7.79.1-r0"
+LIBXML2_VERSION="2.12.6-r0"
 MAINTAINER_NAME="Edward Finlayson <edward.finlayson@btinternet.com"
 AUTHORNAME="Edward Finlayson"
 AUTHORS="edward.finlayson@btinternet.com"

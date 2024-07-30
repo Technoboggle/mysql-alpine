@@ -21,12 +21,15 @@ target "app" {
         DESCRIPTION = "${DESCRIPTION}"
         URL = "${URL}"
         VCS_URL = "${VCS_URL}"
+        VCS_REF = "${VCS_REF}"
         VENDOR = "${VENDOR}"
-        BUILDVERSION = "${BUILD_VERSION}"
+        BUILD_VERSION = "${BUILD_VERSION}"
         BUILD_LOCALLY = "${BUILD_LOCALLY}"
         BUILD_DATE="${BUILD_DATE}"
-        DOCKERCMD:"${DOCKERCMD}"
-        USAGE:"${USAGE}"
+        DOCKERCMD = "${DOCKERCMD}"
+        USAGE = "${USAGE}"
+        CURL_VERSION = "${CURL_VERSION}"
+        LIBXML2_VERSION = "${LIBXML2_VERSION}"
     }
     platforms = ["linux/arm/v6", "linux/arm/v7", "linux/arm64/v8", "linux/amd64", "linux/386", "linux/s390x", "linux/ppc64le"]
     push = true
