@@ -6,6 +6,7 @@ ARG ALPINE_VERSION="${ALPINE_VERSION}"
 ARG MYSQL_VERSION="${MYSQL_VERSION}"
 ARG CURL_VERSION="${CURL_VERSION}"
 ARG LIBXML2_VERSION="${LIBXML2_VERSION}"
+ARG OPENKEYGEN_VERSION="${OPENKEYGEN_VERSION}"
 ARG MAINTAINER_NAME="${MAINTAINER_NAME}"
 ARG AUTHORNAME="${AUTHORNAME}"
 ARG AUTHORS="${AUTHORS}"
@@ -55,7 +56,7 @@ RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql && \
     apk add --no-cache --update \
     curl=${CURL_VERSION} \
     libxml2=${LIBXML2_VERSION} \
-    openssh-keygen \
+    openssh-keygen=${OPENKEYGEN_VERSION} \
     --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ --allow-untrusted; \
     \
     rm -rf /var/cache/apk/* && \
