@@ -20,7 +20,7 @@ fi
 
 NGINX_VERSION=$(echo "$NGINX_VERSION" | tr -d '"')
 ALPINE_VERSION=$(echo "$ALPINE_VERSION" | tr -d '"')
-DOCKERCMD='docker run -it -d --rm -p 8000:80 --name mynginx technoboggle/nginx_mods-alpine:'"$NGINX_VERSION-$ALPINE_VERSION"
+DOCKERCMD='docker run -it -d --rm -p 3306:3306 --name mysql technoboggle/mysql-alpine:'"$MYSQL_VERSION-$ALPINE_VERSION"
 
 sed -i.bu -E 's#DOCKERCMD=".*"#DOCKERCMD="'"${DOCKERCMD//\"/}"'"#g' env.hcl
 
