@@ -57,7 +57,7 @@ RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql && \
     curl=${CURL_VERSION} \
     libxml2=${LIBXML2_VERSION} \
     openssh-keygen=${OPENKEYGEN_VERSION} \
-    bash bash-completion \
+    bash bash-completion gosu \
     --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ --allow-untrusted; \
     \
     rm -rf /var/cache/apk/* && \
