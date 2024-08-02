@@ -67,7 +67,8 @@ RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql && \
 COPY ./files/usage.txt /usr/doc/usage.txt
 
 COPY ./files/healthcheck.sh /usr/local/bin/healthcheck.sh
-COPY ./files/docker-entrypoint.sh /usr/local/bin/
+COPY ./files/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 3306
