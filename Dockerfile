@@ -57,16 +57,18 @@ RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql && \
     curl=${CURL_VERSION} \
     libxml2=${LIBXML2_VERSION} \
     openssh-keygen=${OPENKEYGEN_VERSION} \
+    bash bash-completion \
     --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ --allow-untrusted; \
     \
     rm -rf /var/cache/apk/* && \
     \
     mkdir /docker-entrypoint-initdb.d
 
-# Copy of the MySQL startup script
-COPY ./files/run.sh /scripts/run.sh
 COPY ./files/usage.txt /usr/doc/usage.txt
 
-EXPOSE 3306
+COPY ./files/healthcheck.sh /usr/local/bin/healthcheck.sh
+COPY ./files/docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
 
-ENTRYPOINT ["/scripts/run.sh"]
+EXPOSE 3306
+CMD ["mariadbd"]
