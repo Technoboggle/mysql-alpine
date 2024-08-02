@@ -18,11 +18,16 @@ if [ -f env.hcl ]; then
     done <env.hcl
 fi
 
-NGINX_VERSION=$(echo "$NGINX_VERSION" | tr -d '"')
-ALPINE_VERSION=$(echo "$ALPINE_VERSION" | tr -d '"')
-DOCKERCMD='docker run -it -d --rm -p 3306:3306 --name mysql technoboggle/mysql-alpine:'"$MYSQL_VERSION-$ALPINE_VERSION"
+
+#MYSQL_VERSION=$(echo "$MYSQL_VERSION" | tr -d '"')
+#ALPINE_VERSION=$(echo "$ALPINE_VERSION" | tr -d '"')
+#DOCKERCMD='docker run -it -d --rm -p 3306:3306 --name mysql technoboggle/mysql-alpine:'"$MYSQL_VERSION-$ALPINE_VERSION"
+
+
+DOCKERCMD='docker run -it -d --rm -p 3306:3306 --name mymysql technoboggle/mysql-fpm-alpine:'"${MYSQL_VERSION//\"/}-${ALPINE_VERSION//\"/}"
 
 sed -i.bu -E 's#DOCKERCMD=".*"#DOCKERCMD="'"${DOCKERCMD//\"/}"'"#g' env.hcl
+
 
 export DOCKERCMD
 
