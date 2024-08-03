@@ -32,7 +32,7 @@ target "app" {
         LIBXML2_VERSION = "${LIBXML2_VERSION}"
         OPENKEYGEN_VERSION="${OPENKEYGEN_VERSION}"
     }
-    platforms = ["linux/arm/v6", "linux/arm/v7", "linux/arm64/v8", "linux/amd64", "linux/386", "linux/s390x", "linux/ppc64le"]
+    platforms = ["linux/arm/v6", "linux/arm/v7", "linux/arm/v8", "linux/arm64", "linux/amd64", "linux/386", "linux/s390x", "linux/ppc64le"]
     push = true
     cache = false
     progress = "plain"

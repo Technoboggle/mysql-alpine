@@ -25,6 +25,8 @@ ARG DOCKERCMD="${DOCKERCMD}"
 ARG USAGE="${USAGE}"
 ARG TIMEZONE="Europe/GMT"
 
+ENV GOSU_VERSION=1.17
+
 # Labels.
 LABEL \
     maintainer=${VCS_URL} \
@@ -50,17 +52,42 @@ LABEL \
 
 # Installing packages MariaDB
 RUN addgroup -S -g 1000 mysql && adduser -S -G mysql -u 999 mysql && \
-    apk add --no-cache --upgrade --allow-untrusted --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/  mysql=${MYSQL_VERSION} mysql-client=${MYSQL_VERSION} mariadb-server-utils=${MYSQL_VERSION} ca-certificates; \
-	mkdir /scripts; \
+    apk add --no-cache --upgrade --allow-untrusted --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/  mysql=${MYSQL_VERSION} mysql-client=${MYSQL_VERSION} mariadb-server-utils=${MYSQL_VERSION} ca-certificates && \
+	mkdir /scripts && \
     \
-    apk add --no-cache --update \
-    curl=${CURL_VERSION} \
-    libxml2=${LIBXML2_VERSION} \
-    openssh-keygen=${OPENKEYGEN_VERSION} \
-    bash bash-completion gosu \
-    --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ --allow-untrusted; \
-    \
-    rm -rf /var/cache/apk/* && \
+    apk add --no-cache --update --allow-untrusted --repository https://dl-cdn.alpinelinux.org/alpine/edge/main/ curl=${CURL_VERSION} libxml2=${LIBXML2_VERSION} openssh-keygen=${OPENKEYGEN_VERSION} bash bash-completion findutils
+
+
+RUN set -eux; \
+	\
+	apk add --no-cache --virtual .gosu-deps \
+		ca-certificates \
+		dpkg \
+		gnupg \
+	; \
+	\
+	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
+	wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+	wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+	\
+# verify the signature
+	export GNUPGHOME="$(mktemp -d)"; \
+	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
+	\
+# clean up fetch dependencies
+	apk del --no-network .gosu-deps; \
+	\
+	chmod +x /usr/local/bin/gosu; \
+# verify that the binary works
+	gosu --version; \
+	gosu nobody true
+
+
+
+RUN rm -rf /var/cache/apk/* && \
     \
     mkdir /docker-entrypoint-initdb.d
 
